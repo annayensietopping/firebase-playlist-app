@@ -1,11 +1,16 @@
 $(function () {
   // Fill in your firebase project's information below:
-  // const config = {
-  //   apiKey: 'your_api_key',
-  //   authDomain: 'your_project_id.firebaseapp.com',
-  //   databaseURL: 'https://your_database_name.firebaseio.com',
-  //   storageBucket: 'your_bucket_name.appspot.com'
-  // }
+  /*
+  const firebaseConfig = {
+    apiKey: 'add-api-key',
+    authDomain: 'add-auth-domain',
+    databaseURL: 'add-db-url',
+    projectId: 'add-project-id',
+    storageBucket: 'add-storage-bucket',
+    messagingSenderId: 'add-sender-id',
+    appId: 'add-app-id'
+  }
+  */
 
   // Initialize firebase application with
   // config object above
