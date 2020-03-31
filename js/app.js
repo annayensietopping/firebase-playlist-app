@@ -1,21 +1,24 @@
 $(function () {
   // Fill in your firebase project's information below:
-  /*
+
   const firebaseConfig = {
-    apiKey: 'add-api-key',
-    authDomain: 'add-auth-domain',
-    databaseURL: 'add-db-url',
-    projectId: 'add-project-id',
-    storageBucket: 'add-storage-bucket',
-    messagingSenderId: 'add-sender-id',
-    appId: 'add-app-id'
-  }
-  */
+     apiKey: "AIzaSyCmvvHS6Mh3qCtQ7scCikmBcJmKOOXbVHE",
+     authDomain: "playlist-js-ayt.firebaseapp.com",
+     databaseURL: "https://playlist-js-ayt.firebaseio.com",
+     projectId: "playlist-js-ayt",
+     storageBucket: "playlist-js-ayt.appspot.com",
+     messagingSenderId: "1066943058238",
+     appId: "1:1066943058238:web:6caa479a0010fcbd3d9c6f"
+   };
 
   // Initialize firebase application with
   // config object above
 
-  // firebase.initializeApp(firebaseConfig)
+  firebase.initializeApp(firebaseConfig)
+
+const dbSongs = firebase.firestore().collection('songs')
+console.log(dbSongs)
+
 
   // -------- **CREATE** ---------
 
@@ -24,6 +27,23 @@ $(function () {
     event.preventDefault()
     console.log($('#song-name').val())
     console.log($('#artist-name').val())
+
+    const songName = $('#song-name').val()
+    const artistName = $('#artist-name').val()
+
+    // Firebase API - call .add() <- this is a firebase method
+    // to add document to songs
+    dbSongs.add({
+      artistName: artistName,
+      songName: songName,
+    })
+    .then(function(docRef) {
+    console.log("Document written with ID: ", docRef.id);
+})
+.catch(function(error) {
+    console.error("Error adding document: ", error);
+});
+
 
     clearAddFormFields()
   })
