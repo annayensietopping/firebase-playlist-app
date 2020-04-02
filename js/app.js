@@ -50,18 +50,48 @@ console.log(dbSongs)
 
   // -------- **READ** ---------
 
+dbSongs.onSnapshot((snapshot) => {
+  console.log(snapshot)
+
+// clear songs list
+$('.songs').html('')
+
+  snapshot.forEach((doc) => {
+    console.log(doc.id)
+    console.log(doc.data())
+
+    const id = doc.id
+
+    const playlistItemHtml = buildSongItemHtml(
+      doc.data().artistName,
+      doc.data().songName)
+
+$('.songs')
+  .append(`
+    <div class="song" id="${doc.id}">
+    ${playlistItemHtml}
+    </div>
+    `)
+
+  })
+})
+
   // -------- **UPDATE** ---------
 
   // listen for click event on the "edit" button
   $('body').on('click', 'button.edit-song', (event) => {
     const selectedSongId = $(event.currentTarget).parent().parent().attr('id')
-    const selectedSongName = $(event.currentTarget).parent().parent().find('.song-name').text()
+    const selectedSongName =
+    // using .find() to search top down, get ID first, then use same path to top down search for other elements
+    // traversing the DOM
+     $(event.currentTarget).parent().parent().find('.song-name').text()
     const selectedArtistName = $(event.currentTarget).parent().parent().find('.artist-name').text()
 
     console.log(selectedSongId)
     console.log(selectedSongName)
     console.log(selectedArtistName)
 
+// calls function to generate the edit form in the DOM
     const formHtml = buildEditFormHtml(selectedSongId, selectedSongName, selectedArtistName)
 
     $(event.currentTarget).parent().parent().html(formHtml)
@@ -94,19 +124,42 @@ console.log(dbSongs)
     console.log(updatedSongName)
     console.log(updatedArtistName)
 
-    const playlistItemHtml = buildSongItemHtml(updatedSongName, updatedArtistName)
+    dbSongs.doc(songId).update({
+      songName: updatedSongName,
+      artistName: updatedArtistName
+    })
+    .then(() => {
+      console.log('document removed, post delete code can be added here')
+    })
+    .catch(() => {
+      console.log('errror')
+    })
 
-    $(event.currentTarget).parent().html(playlistItemHtml)
+
+    // const playlistItemHtml = buildSongItemHtml(updatedSongName, updatedArtistName)
+
+    // $(event.currentTarget).parent().html(playlistItemHtml)
   })
 
   // -------- **DELETE** ---------
 
   // listen for click event on the "delete" button
+  // listen for a click in the body, there is always a body but not always songs -- body is a proxy
+  // specify what on the body you are listening for in parens
+  // calling parent twice bc the ID of that entry is in the parent of the parent
+  //
   $('body').on('click', 'button.delete-song', (event) => {
     const songId = $(event.currentTarget).parent().parent().attr('id')
     console.log(songId)
 
-    $(event.currentTarget).parent().parent().remove()
+    dbSongs.doc(songId).delete()
+      .then(() => {
+        console.log('document removed, post delete code can be added here')
+      })
+      .catch(() => {
+        console.log('errror')
+      })
+
   })
 
   // -------- Utility Functions ---------
